@@ -1,4 +1,4 @@
-package com.needleinnovision.libraryapp;
+package com.needleinnovision.libraryapp.config;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

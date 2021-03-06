@@ -1,4 +1,4 @@
-package com.needleinnovision.libraryapp;
+package com.needleinnovision.libraryapp.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
