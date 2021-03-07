@@ -4,14 +4,17 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "USERS_CREDENTIALS")
 public class UserCredentials extends BaseEntity{
-	@Id
-    private long userId;
+	
+	@OneToOne
+	@JoinColumn(name="userId")
+    private UserEntity user;
 	
 	@Column
     private String username;
@@ -25,12 +28,12 @@ public class UserCredentials extends BaseEntity{
 	@Column
     private Date lastLoginTime;
 
-	public long getUserId() {
-		return userId;
+	public UserEntity getUser() {
+		return user;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 	public String getUsername() {

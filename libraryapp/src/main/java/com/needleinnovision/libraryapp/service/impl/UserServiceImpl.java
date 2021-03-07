@@ -18,8 +18,11 @@ import com.needleinnovision.libraryapp.exception.AppException;
 import com.needleinnovision.libraryapp.exception.ErrorDetails;
 import com.needleinnovision.libraryapp.exception.ExceptionUtil;
 import com.needleinnovision.libraryapp.repository.RoleRepository;
+import com.needleinnovision.libraryapp.repository.UserCredentialsRepository;
 import com.needleinnovision.libraryapp.repository.UserRepository;
 import com.needleinnovision.libraryapp.service.UserService;
+import com.needleinnovision.libraryapp.utils.DateUtils;
+import com.needleinnovision.libraryapp.utils.PasswordEncoderUtils;
 
 @Transactional(rollbackOn = Throwable.class)
 public class UserServiceImpl implements UserService{
@@ -28,6 +31,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserCredentialsRepository userCredentialsRepository;
 	
 	@Autowired
 	private RoleRepository roleRepository;
@@ -42,15 +48,13 @@ public class UserServiceImpl implements UserService{
 		try {
 			// Checking business level validations
 			checkIfUserExist(userBo.getMobileNo(), userBo.getEmailId(), userBo.getUsername());
-			Roles role = checkIfRoleExist(userBo.getRole());
+			List<Roles> roles = checkIfRoleExist(userBo.getRole());
 			
 			// Create new User
-			long userId = createNewUser(userBo);
+			UserEntity user = createNewUser(userBo, roles);
 			
 			// Create new Credentials
-			createNewCredentials(userBo, userId);
-			
-			
+			createNewCredentials(userBo, user);
 		}
 		catch(AppException ex) {
 			logger.error("Business validation exception occured at register user service", ex);
@@ -62,35 +66,37 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
-	private void createNewCredentials(UserRegistrationBo userBo, long userId) {
+	private void createNewCredentials(UserRegistrationBo userBo, UserEntity user) {
 		UserCredentials cred = new UserCredentials();
 		cred.setUsername(userBo.getUsername());
-		cred.setUserId(userId);
+		cred.setUser(user);
 		cred.setPassword(PasswordEncoderUtils.encode(userBo.getPassword()));
-		cred.setPasswordExpiryDate(DateUtils.getFutureDate(new Date(), "day", 30));
+		cred.setPasswordExpiryDate(DateUtils.getFutureDate(1));
 		cred.setCreationDate(new Date());
 		cred.setModificationDate(new Date());
 		cred.setModifiedBy("Register Api");
 		cred.setCreatedBy("Register Api");
+		userCredentialsRepository.save(cred);
 	}
 
-	private long createNewUser(UserRegistrationBo userBo) {
+	private UserEntity createNewUser(UserRegistrationBo userBo, List<Roles> roles) {
 		UserEntity newUser = new UserEntity();
 		modelmapper.map(userBo, newUser);
 		newUser.setCreationDate(new Date());
 		newUser.setModificationDate(new Date());
 		newUser.setModifiedBy("Register Api");
 		newUser.setCreatedBy("Register Api");
-		return userRepository.save(newUser).getUserId();
+		newUser.setRoles(roles);
+		return userRepository.save(newUser);
 	}
 
-	private Roles checkIfRoleExist(String role) throws AppException {
+	private List<Roles> checkIfRoleExist(String role) throws AppException {
 		List<Roles> roles = roleRepository.findByName(role);
 		if(roles.size() == 0) {
 			throw new AppException(new ErrorDetails(1011, 4, "data validation error", 
 					"Role does not exist"));
 		}
-		return roles.get(0);
+		return roles;
 	}
 
 	private void checkIfUserExist(String mobileNo, String emailId, String username) throws AppException {
