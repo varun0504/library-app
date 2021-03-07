@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 public class UserEntity extends BaseEntity {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 	
 	@Column
@@ -31,7 +34,7 @@ public class UserEntity extends BaseEntity {
     private String emailId;
 	
 	@OneToOne(mappedBy="user")
-	private UserEntity user;
+	private UserCredentials userCred;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="USER_ROLE_MAPPING", joinColumns = @JoinColumn(name="USER_ID"),
@@ -77,13 +80,12 @@ public class UserEntity extends BaseEntity {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
-
-	public UserEntity getUser() {
-		return user;
+	public UserCredentials getUserCred() {
+		return userCred;
 	}
 
-	public void setUser(UserEntity user) {
-		this.user = user;
+	public void setUserCred(UserCredentials userCred) {
+		this.userCred = userCred;
 	}
 
 	public List<Roles> getRoles() {
@@ -92,5 +94,11 @@ public class UserEntity extends BaseEntity {
 
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
+	}
+
+	@Override
+	public String toString() {
+		return "UserEntity [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", mobileNo="
+				+ mobileNo + ", emailId=" + emailId + ", userCred=" + userCred + ", roles=" + roles + "]";
 	}
 }

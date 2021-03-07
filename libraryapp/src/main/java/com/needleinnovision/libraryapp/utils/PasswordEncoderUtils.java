@@ -1,6 +1,6 @@
 package com.needleinnovision.libraryapp.utils;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordEncoderUtils {
 	public static String encode(String password) {

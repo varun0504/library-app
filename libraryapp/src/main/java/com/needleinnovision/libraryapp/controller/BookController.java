@@ -11,43 +11,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.needleinnovision.libraryapp.bo.UserRegistrationBo;
+import com.needleinnovision.libraryapp.bo.BookBo;
 import com.needleinnovision.libraryapp.exception.AppException;
 import com.needleinnovision.libraryapp.exception.ErrorDetails;
-import com.needleinnovision.libraryapp.request.UserCreationRequest;
+import com.needleinnovision.libraryapp.request.BookFinderRequest;
 import com.needleinnovision.libraryapp.response.AppResponse;
 import com.needleinnovision.libraryapp.response.ResponseBuilder;
-import com.needleinnovision.libraryapp.service.UserService;
-import com.needleinnovision.libraryapp.validators.ValidatorFactory;
+import com.needleinnovision.libraryapp.service.BookService;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+@RequestMapping("/books")
+public class BookController {
+	private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 	
 	@Autowired
 	private ModelMapper modelmapper;
 	
 	@Autowired
-	private UserService userService;
+	private BookService bookService;
 	
-	@RequestMapping(value = "/librarian/register", method = RequestMethod.POST)
-	public AppResponse registerUser(@RequestBody UserCreationRequest registerUserRequest,
+	@RequestMapping(method = RequestMethod.GET)
+	public AppResponse searchBook(HttpServletResponse response) {
+		return searchBook(new BookFinderRequest(), response);
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public AppResponse searchBook(@RequestBody BookFinderRequest request,
 			HttpServletResponse response){
-		logger.info("registerUser: started");
+		logger.info("searchBook: started");
 		
 		AppResponse appResponse = null;
-		UserRegistrationBo registerUserBo = null;
+		BookBo bookBo = null;
 		try {
-			ValidatorFactory.getUserCreationValidator().validate(registerUserRequest);
-			
-			registerUserBo = new UserRegistrationBo();
-			modelmapper.map(registerUserRequest, registerUserBo);
-			registerUserBo.setRole("ROLE_LIBRARIN");
-			userService.registerUser(registerUserBo);
-			
-			appResponse = ResponseBuilder.getSuccessResponse();
+			bookBo = new BookBo();
+			modelmapper.map(request, bookBo);
+			appResponse = ResponseBuilder.getSuccessResponse(bookService.searchBook(bookBo));
 		}
 		catch (AppException ex) {
 			appResponse = ResponseBuilder.getErrorResponse(ex.getErrorDetails(), response);

@@ -3,11 +3,13 @@ package com.needleinnovision.libraryapp.entities;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class BaseEntity {
 	
 	@Column
-	private String status;
+	private String status = "A";
 
 	@Column
 	private Date creationDate; 

@@ -9,5 +9,7 @@ import com.needleinnovision.libraryapp.entities.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-	List<UserEntity> findByMobileNoOrEmailIdOrUsername(String mobileNo, String emailId, String username);
+	List<UserEntity> findByMobileNoOrEmailId(String mobileNo, String emailId);
+	List<UserEntity> findByMobileNo(String mobileNo);
+	List<UserEntity> findByEmailId(String emailId);
 }

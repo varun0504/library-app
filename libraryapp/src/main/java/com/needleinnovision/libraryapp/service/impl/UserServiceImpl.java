@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.needleinnovision.libraryapp.bo.UserRegistrationBo;
 import com.needleinnovision.libraryapp.entities.Roles;
@@ -24,6 +25,7 @@ import com.needleinnovision.libraryapp.service.UserService;
 import com.needleinnovision.libraryapp.utils.DateUtils;
 import com.needleinnovision.libraryapp.utils.PasswordEncoderUtils;
 
+@Service
 @Transactional(rollbackOn = Throwable.class)
 public class UserServiceImpl implements UserService{
 
@@ -47,7 +49,8 @@ public class UserServiceImpl implements UserService{
 		
 		try {
 			// Checking business level validations
-			checkIfUserExist(userBo.getMobileNo(), userBo.getEmailId(), userBo.getUsername());
+			checkIfMobileOrEmailIdExist(userBo.getMobileNo(), userBo.getEmailId());
+			checkIfUsernameExist(userBo.getUsername());
 			List<Roles> roles = checkIfRoleExist(userBo.getRole());
 			
 			// Create new User
@@ -64,6 +67,14 @@ public class UserServiceImpl implements UserService{
 			ExceptionUtil.handleException(ex);
 		}
 		
+	}
+
+	private void checkIfUsernameExist(String username) throws AppException {
+		List<UserCredentials> usersCred = userCredentialsRepository.findByUsername(username);
+		if(usersCred.size() > 0) {
+			throw new AppException(new ErrorDetails(1012, 4, "data validation error", 
+					"Username already exist"));
+		}
 	}
 
 	private void createNewCredentials(UserRegistrationBo userBo, UserEntity user) {
@@ -99,12 +110,15 @@ public class UserServiceImpl implements UserService{
 		return roles;
 	}
 
-	private void checkIfUserExist(String mobileNo, String emailId, String username) throws AppException {
-		List<UserEntity> users = userRepository.findByMobileNoOrEmailIdOrUsername(mobileNo, 
-				emailId, username);
+	private void checkIfMobileOrEmailIdExist(String mobileNo, String emailId) throws AppException {
+		List<UserEntity> users;
+		if(emailId == null) users = userRepository.findByMobileNo(mobileNo);
+		else if(mobileNo == null) users = userRepository.findByEmailId(emailId);
+		else users = userRepository.findByMobileNoOrEmailId(mobileNo, emailId);
+		logger.debug("Users retrieved from database: "+users);
 		if(users.size() > 0) {
 			throw new AppException(new ErrorDetails(1010, 4, "data validation error", 
-					"User already exists with same mobile number or email Id or username"));
+					"User already exists with same mobile number or email Id"));
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -16,6 +17,7 @@ public class UserCredentials extends BaseEntity{
 	@JoinColumn(name="userId")
     private UserEntity user;
 	
+	@Id
 	@Column
     private String username;
 	
