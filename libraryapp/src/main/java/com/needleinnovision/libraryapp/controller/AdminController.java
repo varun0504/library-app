@@ -1,22 +1,19 @@
-package com.needleinnovision.libraryapp.config;
+package com.needleinnovision.libraryapp.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
-public class RoleController {
+@RequestMapping("/admin")
+public class AdminController {
 	
-	@Autowired
+	//private final Logger LOGGER = Logger.getLogger(this.getClass());
+	
+	/*@Autowired
 	private RoleRepository roleRepository;
 	
 	@GetMapping("/phones")
 	public List<Roles> getAllRoles() {
 		return roleRepository.findAll();
-	}
-
+	}*/
 }

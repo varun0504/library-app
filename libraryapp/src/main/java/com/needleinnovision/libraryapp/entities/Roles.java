@@ -1,4 +1,4 @@
-package com.needleinnovision.libraryapp.config;
+package com.needleinnovision.libraryapp.entities;
 
 import java.util.Date;
 
