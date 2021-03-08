@@ -1,22 +1,12 @@
 package com.needleinnovision.libraryapp.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.needleinnovision.libraryapp.bo.BookBo;
-import com.needleinnovision.libraryapp.exception.AppException;
-import com.needleinnovision.libraryapp.exception.ErrorDetails;
-import com.needleinnovision.libraryapp.request.BookFinderRequest;
-import com.needleinnovision.libraryapp.response.AppResponse;
-import com.needleinnovision.libraryapp.response.ResponseBuilder;
 import com.needleinnovision.libraryapp.service.BookService;
 
 @RestController
@@ -30,12 +20,12 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 	
-	@RequestMapping(method = RequestMethod.GET)
+	/*@RequestMapping(method = RequestMethod.GET)
 	public AppResponse searchBook(HttpServletResponse response) {
 		return searchBook(new BookFinderRequest(), response);
-	}
+	}*/
 	
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public AppResponse searchBook(@RequestBody BookFinderRequest request,
 			HttpServletResponse response){
 		logger.info("searchBook: started");
@@ -58,5 +48,5 @@ public class BookController {
 		}
 		logger.info("registerUser: ended");
 		return appResponse;
-	}
+	}*/
 }

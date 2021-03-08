@@ -1,12 +1,29 @@
 package com.needleinnovision.libraryapp.request;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import com.needleinnovision.libraryapp.validators.CheckAtLeastOneNotNull;
+
+@CheckAtLeastOneNotNull(fieldNames={"mobileNo","emailId"}, message = "Both mobileNo and emailId cannot be empty")
 public class UserCreationRequest {
 	
+	@NotBlank(message = "First Name cannot be null or empty")
 	private String firstName;
+	
 	private String lastName;
+	
+	@Pattern(regexp="^[6-9]\\d{9}$", message = "Invalid Mobile number")
 	private String mobileNo;
+	
+	@Email(message = "Invalid Email Id")
 	private String emailId;
+	
+	@NotBlank(message = "Username cannot be null or empty")
 	private String username;
+	
+	@NotBlank(message = "Password cannot be null or empty")
 	private String password;
 	
 	public String getFirstName() {

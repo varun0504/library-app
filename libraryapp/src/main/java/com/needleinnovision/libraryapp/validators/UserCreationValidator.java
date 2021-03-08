@@ -18,7 +18,7 @@ public class UserCreationValidator implements Validators{
 
 	public void validate(UserCreationRequest request) throws AppException {
 		for(String field: nonNullableFields) {
-			CommonValidator.isNullOrEmpty(field, PropertyUtils.getPropertyValue(field, request));
+			CommonValidator.isNullOrEmpty(field, PropertyUtils.getProperty(request, field));
 		}
 		for(Validators validator: constraintsValidation) {
 			validator.validate(request);

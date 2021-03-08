@@ -1,24 +1,13 @@
 package com.needleinnovision.libraryapp.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.needleinnovision.libraryapp.bo.UserRegistrationBo;
-import com.needleinnovision.libraryapp.exception.AppException;
-import com.needleinnovision.libraryapp.exception.ErrorDetails;
-import com.needleinnovision.libraryapp.request.UserCreationRequest;
-import com.needleinnovision.libraryapp.response.AppResponse;
-import com.needleinnovision.libraryapp.response.ResponseBuilder;
 import com.needleinnovision.libraryapp.service.UserService;
-import com.needleinnovision.libraryapp.validators.ValidatorFactory;
 
 @RestController
 @RequestMapping("/admin")
@@ -32,7 +21,7 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value = "/librarian/register", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/librarian/register", method = RequestMethod.POST)
 	public AppResponse registerUser(@RequestBody UserCreationRequest registerUserRequest,
 			HttpServletResponse response){
 		logger.info("registerUser: started");
@@ -60,5 +49,5 @@ public class AdminController {
 		}
 		logger.info("registerUser: ended");
 		return appResponse;
-	}
+	}*/
 }

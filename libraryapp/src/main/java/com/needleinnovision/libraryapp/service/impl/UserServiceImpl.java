@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private ModelMapper modelmapper;
 	
-	@Override
+	/*@Override
 	public void registerUser(UserRegistrationBo userBo) throws Exception, AppException {
 		logger.info("registerUser: started");
 		
@@ -67,6 +67,22 @@ public class UserServiceImpl implements UserService{
 			ExceptionUtil.handleException(ex);
 		}
 		
+	}*/
+	
+	@Override
+	public void registerUser(UserRegistrationBo userBo){
+		logger.info("registerUser: started");
+
+		// Checking business level validations
+		checkIfMobileOrEmailIdExist(userBo.getMobileNo(), userBo.getEmailId());
+		checkIfUsernameExist(userBo.getUsername());
+		List<Roles> roles = checkIfRoleExist(userBo.getRole());
+
+		// Create new User
+		UserEntity user = createNewUser(userBo, roles);
+
+		// Create new Credentials
+		createNewCredentials(userBo, user);
 	}
 
 	private void checkIfUsernameExist(String username) throws AppException {

@@ -1,18 +1,18 @@
 package com.needleinnovision.libraryapp.response;
 
 public class ErrorResponse {
-	private int errorCode;
 	private String message;
-	public ErrorResponse(int errorCode, String message) {
+	private String details;
+	public ErrorResponse(String message, String details) {
 		super();
-		this.errorCode = errorCode;
+		this.details = details;
 		this.message = message;
 	}
-	public int getErrorCode() {
-		return errorCode;
+	public String getDetails() {
+		return details;
 	}
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
+	public void setDetails(String details) {
+		this.details = details;
 	}
 	public String getMessage() {
 		return message;
@@ -20,6 +20,4 @@ public class ErrorResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
 }
